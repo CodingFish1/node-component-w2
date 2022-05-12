@@ -1,4 +1,4 @@
-function successHandler(res){
+function successHandler(res,data){
     const headers = {
         'Access-Control-Allow-Headers': 'Content-Type, Authorization, Content-Length, X-Requested-With',
         'Access-Control-Allow-Origin': '*',
@@ -7,8 +7,8 @@ function successHandler(res){
      }
      res.writeHead(200,headers)
      res.write(JSON.stringify({
-         "status": "true",
-         "message": 'OK-OK',
+        "status": "success",
+        "data": data
      }))
      res.end()
 }
