@@ -8,8 +8,7 @@ const Post = require('../model/posts'); //Chunk4
 const router = async (req,res) => {
     let body = ''
     req.on('data', chunk => {
-    body += chunk
-})
+    body += chunk })
     
     if(req.url==="/posts" && req.method === "GET") {
         const allPosts = await Post.find()

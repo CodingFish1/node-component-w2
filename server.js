@@ -25,7 +25,7 @@ mongoose
 
 
 const requestListener = async (req, res) => {
-        router(req.res)
+        router(req, res)
         } 
 
 module.exports = requestListener;
