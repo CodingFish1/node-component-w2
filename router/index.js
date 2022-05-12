@@ -7,9 +7,10 @@ const Post = require('../model/posts'); //Chunk4
 
 const router = async (req,res) => {
     let body = ''
-    req.on('data', chunk => {
-    body += chunk })
-    
+    req.on('data', (chunk) => {
+      body += chunk
+    })
+
     if(req.url==="/posts" && req.method === "GET") {
         const allPosts = await Post.find()
         successHandler(res, allPosts);
@@ -17,14 +18,14 @@ const router = async (req,res) => {
     } else if (req.url = '/posts' && req.method === 'POST') {
         req.on('end', async()=>{
             try {
-                if(data.content) {
                 const data = JSON.parse(body)
-                const newPost = await Post.create( 
-                    {
+                if(data.content) {
+                    const newPost = await Post.create({
                         name: data.name,
                         content: data.content,
+                        image: data.image,
                         tags: data.tags,
-                        type: data.type
+                        likes: data.likes
                     })
                     successHandler(res, newPost);
                     res.end()
@@ -34,6 +35,8 @@ const router = async (req,res) => {
             } catch (error) {
                 errorHandler(res,error);
                     res.end()
+                    console.log(body)
+                    console.log('Here 2')
                 }
             })
     } else if (req.url="/posts" && req.method ==="DELETE") {
@@ -44,12 +47,12 @@ const router = async (req,res) => {
 }
 
 // Post.create(
-//     {
-//         name: 'jiii',
-//         content: 'data.content',
-//         tags: 'data.tags',
-//         type: `group`
-//     }
+    // {
+    //     name: 'jiii',
+    //     content: 'data.content',
+    //     tags: 'data.tags',
+    //     type: `group`
+    // }
 //     ).then (() => {
 //         console.log('Inserted a New Recording-Type2')
 //     }
