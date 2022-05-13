@@ -13,7 +13,7 @@ const postsSchema = new mongoose.Schema({
   ],
   type: {
     type: String,
-    enum:['group','person'],
+    enum:["group","person"],
     required: [true, 'Please fill the Type of post']
   },
   image: {

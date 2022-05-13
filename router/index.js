@@ -22,10 +22,12 @@ const router = async (req,res) => {
                 if(data.content) {
                     const newPost = await Post.create({
                         name: data.name,
-                        content: data.content,
-                        image: data.image,
                         tags: data.tags,
-                        likes: data.likes
+                        type: data.type,
+                        image: data.image,
+                        content: data.content,
+                        likes: data.likes,
+                        comments: data.comments
                     })
                     successHandler(res, newPost);
                     res.end()
@@ -35,15 +37,42 @@ const router = async (req,res) => {
             } catch (error) {
                 errorHandler(res,error);
                     res.end()
-                    console.log(body)
-                    console.log('Here 2')
                 }
             })
     } else if (req.url="/posts" && req.method ==="DELETE") {
-            const delPosts = await Post.deleteMany({})
-            successHandler(res);
-            res.end()
+        const delPosts = await Post.deleteMany({})
+        successHandler(res);
+        res.end()
+    } else if (req.url.startsWith("/posts/") && req.method == "DELETE") {
+        const id = req.url.split('/').pop()
+        try {
+        const deleteResult = await Post.findByIdAndDelete(id);
+            if(deleteResult) {
+                successHandler(res, deleteResult)
+            } else {
+                errorHandler(res, deleteResult)
+            }
+        } catch(error){
+            errorHandler(res, deleteResult)
         }
+    } else if (req.url.startsWith("/posts/") && req.method == "PATCH") {
+        req.on('end', async()=>{
+            const id = req.url.split('/').pop()
+            const data = JSON.parse(body) 
+            if (
+                Object.keys(data).length == 0 ||
+                (data.hasOwnProperty('content') && data.content === '') ||
+                data.tags.length === 0
+              ) {
+                errorHandler(res)
+              } else {
+                const updateResult = await Post.findByIdAndUpdate(id,
+                    ...data,
+                    )
+                
+            }
+        })
+    }
 }
 
 // Post.create(
