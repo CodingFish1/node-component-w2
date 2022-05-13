@@ -11,11 +11,11 @@ const router = async (req,res) => {
       body += chunk
     })
 
-    if(req.url==="/posts" && req.method === "GET") {
+    if(req.url==='/posts' && req.method === 'GET') {
         const allPosts = await Post.find()
         successHandler(res, allPosts);
         res.end()
-    } else if (req.url = '/posts' && req.method === 'POST') {
+    } else if (req.url === '/posts' && req.method === 'POST') {
         req.on('end', async()=>{
             try {
                 const data = JSON.parse(body)
@@ -39,11 +39,11 @@ const router = async (req,res) => {
                     res.end()
                 }
             })
-    } else if (req.url="/posts" && req.method ==="DELETE") {
+    } else if (req.url==='/posts' && req.method === 'DELETE') {
         const delPosts = await Post.deleteMany({})
         successHandler(res);
         res.end()
-    } else if (req.url.startsWith("/posts/") && req.method == "DELETE") {
+    } else if (req.url.startsWith('/posts/') && req.method === 'DELETE') {
         const id = req.url.split('/').pop()
         try {
         const deleteResult = await Post.findByIdAndDelete(id);
@@ -53,23 +53,23 @@ const router = async (req,res) => {
                 errorHandler(res, deleteResult)
             }
         } catch(error){
-            errorHandler(res, deleteResult)
+            errorHandler(res, error)
         }
-    } else if (req.url.startsWith("/posts/") && req.method == "PATCH") {
+    } else if (req.url.startsWith('/posts/') && req.method === 'PATCH') {
         req.on('end', async()=>{
             const id = req.url.split('/').pop()
             const data = JSON.parse(body) 
             if (
-                Object.keys(data).length == 0 ||
+                Object.keys(data).length === 0 ||
                 (data.hasOwnProperty('content') && data.content === '') ||
                 data.tags.length === 0
               ) {
                 errorHandler(res)
               } else {
                 const updateResult = await Post.findByIdAndUpdate(id,
-                    ...data,
+                    {...data}
                     )
-                
+                res.end()          
             }
         })
     }
