@@ -70,7 +70,7 @@ const router = async (req,res) => {
                         opts
                         )
                     if (updateResult === null) {
-                        errorHandler(res, error) 
+                        errorHandler(res, "No such ID, please check again") 
                     }
                     res.end()          
                 }
